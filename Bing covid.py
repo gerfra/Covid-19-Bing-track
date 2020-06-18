@@ -236,7 +236,7 @@ def covidscrapy(data,location):
     tc, td, tr= 0,0,0
     totp = 0
     st, sn = "",""
-    somma = 0
+    somma,sommad,sommag = 0,0,0
     totpd = 0
     
     for each in data['areas']:
@@ -268,9 +268,19 @@ def covidscrapy(data,location):
                 totpd = (tc-(td+0))#si si no
            elif tc is not None and td is None and tr is not None:
                 totpd = (tc-(0+tr))#si no si
-            
-           somma = somma + x['totalConfirmed']
+
+           #calcolo manuale
+           if x['totalConfirmed'] is not None:
+               somma = somma + x['totalConfirmed']
+           if x['totalDeaths'] is not None:
+               sommad = sommad + x['totalDeaths']
+           if x['totalRecovered'] is not None:
+               sommag = sommag + x['totalRecovered']
+
            my_list.append(("",sn,tc,td,tr,totpd))
+
+        #calcolo manuale   
+        my_list.append(("Somma","",somma,sommad,sommag,somma-(sommad+sommag)))  
         
     return sorted(my_list, key=itemgetter(2),reverse=True)
 
